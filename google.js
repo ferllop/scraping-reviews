@@ -1,12 +1,10 @@
 'use strict'
 
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer'),
+    puppeteerConfig = require('./config.json')
 
 const google = async (url) => {
-    let browser = await puppeteer.launch({
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            headless: false
-        });
+    let browser = await puppeteer.launch(puppeteerConfig);
     const page = await browser.newPage()
 
     await page.goto(url)
