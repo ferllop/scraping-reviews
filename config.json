@@ -1,4 +1,5 @@
 {
-    "args": ["--no-sandbox", "--disable-setuid-sandbox"],
-    "headless": true
+    "args": ["--lang=es-ES", "--no-sandbox", "--disable-setuid-sandbox"],
+    "headless": true,
+"dumpio" : true
 }
