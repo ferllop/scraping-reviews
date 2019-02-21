@@ -1,10 +1,10 @@
 'use strict'
 
 const puppeteer = require('puppeteer'),
-    puppeteerConfig = require('./config.json')
+    config = require('./.env')
 
 const starOfService = async (url) => {
-    let browser = await puppeteer.launch(puppeteerConfig);
+    let browser = await puppeteer.launch(config.puppeteer);
     const page = await browser.newPage()
 
     await page.goto(url)
@@ -16,10 +16,9 @@ const starOfService = async (url) => {
 
 
     //Sacamos los datos de cada review y los metemos en un array de objetos.
-    const minimumRating = 4
-    const minimumCharInContent = 10
-
-    const prohibitedNames = ['Lidia L.', 'Carmen M.', 'Deivid A.', 'Laura C.']
+    const minimumRating = config.webs[1].ignore_reviews.by_minimum_rating
+    const minimumCharInContent = config.webs[1].ignore_reviews.by_minimum_characters_count_in_content
+    const prohibitedNames = config.webs[1].ignore_reviews.by_name
 
     let reviews = await page.evaluate((selector, minRating, minChars, noNames) => {
         let allReviews = []

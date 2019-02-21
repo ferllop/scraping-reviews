@@ -2,11 +2,11 @@
 
 const 
     puppeteer = require('puppeteer'),
-    puppeteerConfig = require('./config.json')
+    config = require('./.env')
 
 const google = async (url) => 
 {
-    let browser = await puppeteer.launch(puppeteerConfig);
+    let browser = await puppeteer.launch(config.puppeteer);
     const page = await browser.newPage()
 
     await page.goto(url)
@@ -45,9 +45,9 @@ const google = async (url) =>
     }
 
     //Sacamos los datos de cada review y los metemos en un array de objetos.
-    const minimumRating = 4
-    const minimumCharInContent = 10
-    const prohibitedNames = ['Javier Garcia Garcia', 'Iván Alonso', 'Laura Cubero', 'Marta Gimenez', 'Carmen Morillas', 'David López', 'Omar Salinas', 'Sonia Gallego']
+    const minimumRating = config.webs[0].ignore_reviews.by_minimum_rating
+    const minimumCharInContent = config.webs[0].ignore_reviews.by_minimum_characters_count_in_content
+    const prohibitedNames = config.webs[0].ignore_reviews.by_name
 
     let reviews = await page.evaluate((selector, minRating, minChars, noNames) => 
     {
