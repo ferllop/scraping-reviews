@@ -1,21 +1,30 @@
 'use strict'
 
-const puppeteer = require('puppeteer'),
+const 
+    puppeteer = require('puppeteer'),
     puppeteerConfig = require('./config.json')
 
-const google = async (url) => {
+const google = async (url) => 
+{
     let browser = await puppeteer.launch(puppeteerConfig);
     const page = await browser.newPage()
 
     await page.goto(url)
-
+    
     //Sacamos el total de reseñas que hay
     const reviewsQtySelector = '.Vfp4xe'
     await page.waitForSelector(reviewsQtySelector)
-    const reviewsQtyText = await page.evaluate(reviewsQtySelector => {
+    const reviewsQtyText = await page.evaluate(reviewsQtySelector => 
+    {
         return reviewsQtyText = document.querySelector(reviewsQtySelector).innerText
     }, reviewsQtySelector)
+
     const totalReviewsQty = parseInt(reviewsQtyText.replace(' reseñas', ''))
+
+    //Ordenamos las reseñas de más nueva a más antigua
+    await page.click('g-dropdown-menu')
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
 
     //Vamos a la ultima review que hay cargada
     //y comprobamos si hay las mismas que las que dice el total de reseñas.
@@ -23,14 +32,14 @@ const google = async (url) => {
     const reviewSelector = '.gws-localreviews__google-review'
     let loadedReviewsQty = []
     await page.waitFor(Math.floor(Math.random() * 2000));
-    await page.keyboard.down('Shift')
     await page.keyboard.press('Tab')
-    await page.keyboard.up('Shift')
 
-    while (loadedReviewsQty < totalReviewsQty){
+    while (loadedReviewsQty < totalReviewsQty)
+    {
         await page.keyboard.press('End')
         await page.waitFor(Math.floor(Math.random() * 2000))
-        loadedReviewsQty = await page.evaluate((selector)=> {
+        loadedReviewsQty = await page.evaluate((selector)=> 
+        {
             return document.querySelectorAll(selector).length
         }, reviewSelector)
     }
@@ -40,10 +49,12 @@ const google = async (url) => {
     const minimumCharInContent = 10
     const prohibitedNames = ['Javier Garcia Garcia', 'Iván Alonso', 'Laura Cubero', 'Marta Gimenez', 'Carmen Morillas', 'David López', 'Omar Salinas', 'Sonia Gallego']
 
-    let reviews = await page.evaluate((selector, minRating, minChars, noNames) => {
+    let reviews = await page.evaluate((selector, minRating, minChars, noNames) => 
+    {
         let allReviews = []
-        document.querySelectorAll(selector).forEach( review => {
-            let rating = review.querySelector('.EBe2gf').getAttribute('aria-label')
+        document.querySelectorAll(selector).forEach( review => 
+        {
+            let rating = review.querySelector('g-review-stars span').getAttribute('aria-label')
                 .replace('Valoración de ', '')
                 .replace(' de un máximo de 5,', '')
             let name = review.querySelector('.Y0uHMb').innerText;
@@ -54,15 +65,20 @@ const google = async (url) => {
             let content
             let tempContent = review.querySelector('.Jtu6Td')
 
-            if(tempContent.querySelector('.review-full-text')) {
+            if(tempContent.querySelector('.review-full-text')) 
+            {
                 content = tempContent.querySelector('.review-full-text')
                                 content.querySelectorAll('span').length === 3
                 ? content = content.querySelectorAll('span')[2].innerText
                 : content = content.innerText
 
-            } else if (tempContent.querySelectorAll('span').length === 4){
+            } 
+            else if (tempContent.querySelectorAll('span').length === 4)
+            {
                 content = tempContent.querySelectorAll('span')[3].innerText
-            } else {
+            } 
+            else 
+            {
                 content = tempContent.innerText
             }
 
@@ -87,3 +103,4 @@ const google = async (url) => {
 }
 
 module.exports = google
+
