@@ -5,7 +5,8 @@ const
     config = require('./.env'),
     providers = {
         google : require('./google'),
-        star_of_service : require('./star-of-service')
+        star_of_service : require('./star-of-service'),
+        bodas : require('./bodas.net')
     };
 
 (async () => {
