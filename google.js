@@ -10,16 +10,16 @@ const google = async (url) =>
     const page = await browser.newPage()
 
     await page.goto(url)
-    
+
     //Sacamos el total de reseñas que hay
-    const reviewsQtySelector = '.Vfp4xe'
+    const reviewsQtySelector = '.yVc3Hc'
+
     await page.waitForSelector(reviewsQtySelector)
-    const reviewsQtyText = await page.evaluate(reviewsQtySelector => 
-    {
+    const reviewsQtyText = await page.evaluate(reviewsQtySelector => {
         return reviewsQtyText = document.querySelector(reviewsQtySelector).innerText
     }, reviewsQtySelector)
 
-    const totalReviewsQty = parseInt(reviewsQtyText.replace(' reseñas', ''))
+    const totalReviewsQty = parseInt(reviewsQtyText.replace(' opiniones', ''))
 
     //Ordenamos las reseñas de más nueva a más antigua
     await page.click('g-dropdown-menu')
@@ -57,8 +57,8 @@ const google = async (url) =>
             let rating = review.querySelector('g-review-stars span').getAttribute('aria-label')
                 .replace('Valoración de ', '')
                 .replace(' de un máximo de 5,', '')
-            let name = review.querySelector('.Y0uHMb').innerText;
-            name = name.toLowerCase()
+            let name = review.querySelector('.TSUbDb').innerText;
+		name = name.toLowerCase()
                 .split(' ')
                 .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
                 .join(' ')

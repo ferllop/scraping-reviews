@@ -12,7 +12,7 @@ const starOfService = async (url) => {
     //Vamos a la ultima review que hay cargada
     //y comprobamos si hay las mismas que las que dice el total de reseñas.
     //Si no las hay, repetimos
-    const reviewSelector = '.profile-reviews__item'
+    const reviewSelector = '.list-received_item'
 
 
     //Sacamos los datos de cada review y los metemos en un array de objetos.
@@ -25,14 +25,20 @@ const starOfService = async (url) => {
         document.querySelectorAll(selector).forEach( review => {
             let rating = review.querySelector('.rating-stars').title
 
-            let name = review.querySelector('.profile-reviews__title').innerText;
+            let name = review.querySelector('.list-received_item-name').innerText;
             name = name.toLowerCase()
+                .replace(/[\n]/g, '')
+                .trim()
                 .split(' ')
                 .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
                 .join(' ')
 
-            let content = review.querySelector('.profile-reviews__text__content').innerText.replace(/[\r\n]/g, '').trim()
+            let content = review.querySelector('.review-full-message')
+            if (!content)
+	        content = review.querySelector('.list-received_item-review')
 
+            content = content.innerText.replace(/[\r\n]/g, '').trim()
+            
             let reviewObj = {
                 id : allReviews.length,
                 source: 'Star Of Service',
